@@ -1,5 +1,6 @@
 using JEOBWebAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var myAllowSpecificOrigin = "_myAllowSpecificOrigin";
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddCors( options => {
             .AllowAnyHeader();
         });
 });
+
+builder.Services.AddControllers().AddJsonOptions(e => e.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
