@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JEOBWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class LoginController : Controller
     {
@@ -18,7 +18,8 @@ namespace JEOBWebAPI.Controllers
 
 
         [HttpPost, ActionName("Login")]
-        public IActionResult Login(LoginInput login) {
+        public IActionResult Login([FromBody] LoginInput login) {
+            Console.WriteLine("AQUI ENTRÓ");
             return Ok(this._LoginService.Verifylogin(login));
         }
     }

@@ -2,7 +2,6 @@ using JEOBWebAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
-var myAllowSpecificOrigin = "_myAllowSpecificOrigin";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,16 +14,17 @@ builder.Services.AddDbContext<DataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 //Enable CORS
-builder.Services.AddCors( options => {
-    options.AddPolicy(name: myAllowSpecificOrigin,
-        builder => {
-            builder.WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
 });
 
 builder.Services.AddControllers().AddJsonOptions(e => e.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 
 var app = builder.Build();
 
@@ -37,10 +37,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(myAllowSpecificOrigin);
-
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("CorsPolicy");
 
 app.Run();

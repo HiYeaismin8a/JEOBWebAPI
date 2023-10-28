@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace JEOBWebAPI.Models.ViewModels
 {
@@ -16,6 +17,7 @@ namespace JEOBWebAPI.Models.ViewModels
         [Required]
         public decimal Costo { get; set; }
 
-        public List<Alumno> Alumnos { get; } = new ();
+        [JsonIgnore]
+        public List<Alumno> Alumnos { get; set; } = new();
     }
 }

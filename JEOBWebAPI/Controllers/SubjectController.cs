@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace JEOBWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class SubjectController : Controller
     {
@@ -37,6 +37,12 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._subjectService.AddSubject(materia));
         }
 
+        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")] //Asignar materias a alumnos
+        public IActionResult PostStudent([FromRoute] int idAlumno, [FromRoute] int idMateria)
+        {
+            return Ok(this._subjectService.AddStudent(idAlumno, idMateria));
+        }
+
 
         [HttpPut, ActionName("UpdateMateria")]
         public IActionResult UpdateMateria([FromBody] Materia materia)
@@ -50,13 +56,6 @@ namespace JEOBWebAPI.Controllers
         {//id
 
             return Ok(this._subjectService.DeleteMateria(id));
-        }
-
-
-        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")]
-        public IActionResult PostStudent([FromRoute] int idAlumno, [FromRoute] int idMateria)
-        {
-            return Ok(this._subjectService.AddStudent(idAlumno, idMateria));
         }
     }
 }

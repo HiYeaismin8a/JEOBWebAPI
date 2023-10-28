@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JEOBWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     [ApiController]
     public class StudentController : Controller
     {
@@ -35,6 +35,10 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._studentService.GetAllStudents());
         }
 
+        [HttpGet, ActionName("GetSubjectByIdStudent"), Route("{id:int}")]
+        public IActionResult GetSubjectByIdStudent([FromRoute] int id) {
+            return Ok(this._studentService.GetSubjectByIdStudent(id));
+        }
 
         [HttpPost, ActionName("PostStudent")]
         public IActionResult PostStudent([FromBody] Alumno alumno)
@@ -43,11 +47,17 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._studentService.AddStudent(alumno));
         }
 
+        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")]
+        public IActionResult PostSubject([FromRoute] int idAlumno, [FromRoute] int idMateria)
+        {
+            return Ok(this._studentService.AddSubject(idMateria, idAlumno));
+        }
+
 
         [HttpPut, ActionName("UpdateStudent")]
         public IActionResult UpdateStudent([FromBody] Alumno alumno)
         {
-
+            alumno.Materias = new List<Materia>();
             return Ok(this._studentService.UpdateStudent(alumno));
         }
 
@@ -59,9 +69,5 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._studentService.DeleteStudent(id));
         }
 
-        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")]
-        public IActionResult PostSubject([FromRoute] int idAlumno, [FromRoute] int idMateria)    {
-            return Ok(this._studentService.AddSubject(idMateria, idAlumno));
-        }
     }
 }

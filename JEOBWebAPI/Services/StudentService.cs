@@ -8,12 +8,14 @@ namespace JEOBWebAPI.Services
     public class StudentService
     {
         private readonly DataContext _context;
-        public StudentService(DataContext context) { 
+        public StudentService(DataContext context)
+        {
             this._context = context;
         }
 
         //Get
-        public Alumno GetStudent(int id) {
+        public Alumno GetStudent(int id)
+        {
 
             return this._context.Alumnos.Include(e => e.Materias).FirstOrDefault();
         }
@@ -25,8 +27,17 @@ namespace JEOBWebAPI.Services
             return this._context.Alumnos.Include(e => e.Materias).ToList();
         }
 
+        //GetSubjectByIdStudent
+        public List<Materia> GetSubjectByIdStudent(int idStudent)
+        {
+            var student =  this._context.Alumnos.Include(e => e.Materias).FirstOrDefault(e => e.IdAlumno == idStudent);
+
+            return (student == null) ? new List<Materia>() : student.Materias;
+        }
+
         //Post
-        public Alumno AddStudent(Alumno alumno) {
+        public Alumno AddStudent(Alumno alumno)
+        {
             var result = this._context.Alumnos.Add(alumno);
             this._context.SaveChanges();
 
@@ -43,7 +54,7 @@ namespace JEOBWebAPI.Services
         }
 
         //Delete
-        public bool DeleteStudent( int id)
+        public bool DeleteStudent(int id)
         {
             var alumno = this._context.Alumnos.Find(id);
             if (alumno.Materias.Count > 0) return false;
@@ -55,7 +66,8 @@ namespace JEOBWebAPI.Services
         }
 
         //
-        public bool AddSubject(int idMateria, int idAlumno) {
+        public bool AddSubject(int idMateria, int idAlumno)
+        {
             var alumno = this._context.Alumnos.Find(idAlumno);
             var materia = this._context.Materias.Find(idMateria);
             alumno.Materias.Add(materia);

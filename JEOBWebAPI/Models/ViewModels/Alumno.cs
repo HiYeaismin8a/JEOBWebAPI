@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.Json.Serialization;
 
 namespace JEOBWebAPI.Models.ViewModels
 {
@@ -20,6 +21,7 @@ namespace JEOBWebAPI.Models.ViewModels
         [Required]
         public string ApellidoMaterno{ get; set; }
 
-        public List<Materia> Materias { get;} = new ();
+        [JsonIgnore]
+        public List<Materia> Materias { get; set; } = new();
     }
 }
