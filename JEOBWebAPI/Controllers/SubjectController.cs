@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace JEOBWebAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]/[Action]")]
     [ApiController]
     public class SubjectController : Controller
     {
@@ -31,18 +31,17 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._subjectService.GetAllMateria());
         }
 
+        [HttpGet, ActionName("GetStudentByIdSubject"), Route("{idSubject:int}")]
+        public IActionResult GetStudentByIdSubject([FromRoute] int idSubject) {
+
+            return Ok(this._subjectService.GetStudentByIdSubject(idSubject));
+        }
+
         [HttpPost, ActionName("PostMateria")]
         public IActionResult PostMateria([FromBody] Materia materia)
         {//Crear- Insertear
             return Ok(this._subjectService.AddSubject(materia));
         }
-
-        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")] //Asignar materias a alumnos
-        public IActionResult PostStudent([FromRoute] int idAlumno, [FromRoute] int idMateria)
-        {
-            return Ok(this._subjectService.AddStudent(idAlumno, idMateria));
-        }
-
 
         [HttpPut, ActionName("UpdateMateria")]
         public IActionResult UpdateMateria([FromBody] Materia materia)
@@ -51,8 +50,8 @@ namespace JEOBWebAPI.Controllers
         }
 
 
-        [HttpDelete, ActionName("DeleteMateria"), Route("{id:int}")]
-        public IActionResult DeleteMateria([FromRoute] int id)
+        [HttpDelete, ActionName("DeleteSubject"), Route("{id:int}")]
+        public IActionResult DeleteSubject([FromRoute] int id)
         {//id
 
             return Ok(this._subjectService.DeleteMateria(id));

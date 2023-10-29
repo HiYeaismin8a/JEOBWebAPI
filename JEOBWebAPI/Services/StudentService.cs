@@ -30,7 +30,7 @@ namespace JEOBWebAPI.Services
         //GetSubjectByIdStudent
         public List<Materia> GetSubjectByIdStudent(int idStudent)
         {
-            var student =  this._context.Alumnos.Include(e => e.Materias).FirstOrDefault(e => e.IdAlumno == idStudent);
+            var student = this._context.Alumnos.Include(e => e.Materias).FirstOrDefault(e => e.IdAlumno == idStudent);
 
             return (student == null) ? new List<Materia>() : student.Materias;
         }
@@ -66,14 +66,20 @@ namespace JEOBWebAPI.Services
         }
 
         //
-        public bool AddSubject(int idMateria, int idAlumno)
+        public bool AddSubject(int idAlumno, List<int> materias)
         {
-            var alumno = this._context.Alumnos.Find(idAlumno);
-            var materia = this._context.Materias.Find(idMateria);
-            alumno.Materias.Add(materia);
-            var result = this._context.SaveChanges();
+            var alumno = this._context.Alumnos.Include(e => e.Materias).SingleOrDefault(e => e.IdAlumno == idAlumno);
+            if (alumno == null) return false;
 
-            return result > 0;
+            foreach (var materia in alumno.Materias.ToList())
+            {
+                alumno.Materias.Remove(materia);
+            }
+
+            bool original = this._context.SaveChanges() > 0;
+            var mats = this._context.Materias.Where(e => materias.Contains(e.IdMateria)).ToList();
+            alumno.Materias.AddRange(mats);
+            return this._context.SaveChanges() > 0 || original;
         }
     }
 }

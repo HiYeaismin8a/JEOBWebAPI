@@ -26,6 +26,13 @@ namespace JEOBWebAPI.Services
             return this._dataContext.Materias.Include(e => e.Alumnos).ToList();
         }
 
+        //GetStudentByIdSubject
+        public List<Alumno> GetStudentByIdSubject(int idSubject) {
+            var subject = this._dataContext.Materias.Include(e => e.Alumnos).FirstOrDefault(e => e.IdMateria == idSubject);
+
+            return (subject == null) ? new List<Alumno>() : subject.Alumnos;
+        }
+
         //Post
         public Materia AddSubject(Materia materia) {
             var result = this._dataContext.Materias.Add(materia);

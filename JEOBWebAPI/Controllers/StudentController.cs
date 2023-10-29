@@ -47,10 +47,10 @@ namespace JEOBWebAPI.Controllers
             return Ok(this._studentService.AddStudent(alumno));
         }
 
-        [HttpPost, Route("{idAlumno:int}/{idMateria:int}")]
-        public IActionResult PostSubject([FromRoute] int idAlumno, [FromRoute] int idMateria)
+        [HttpPost, Route("{idAlumno:int}")]
+        public IActionResult PostSubject([FromRoute] int idAlumno, [FromBody] List<int> materias)
         {
-            return Ok(this._studentService.AddSubject(idMateria, idAlumno));
+            return Ok(this._studentService.AddSubject( idAlumno, materias));
         }
 
 
