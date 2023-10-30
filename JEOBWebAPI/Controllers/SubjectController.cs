@@ -12,10 +12,12 @@ namespace JEOBWebAPI.Controllers
     {
         private readonly DataContext _context;
         private readonly SubjectService _subjectService;
-        public SubjectController(DataContext context)
+       
+        public SubjectController(DataContext context, IConfiguration configuration)
         {
             this._context = context;
-            this._subjectService = new SubjectService(context);
+            this._subjectService = new SubjectService(context, configuration);
+
         }
 
         [HttpGet, ActionName("GetMateria"), Route("{id:int}")]

@@ -2,14 +2,17 @@
 using JEOBWebAPI.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
 
 namespace JEOBWebAPI.Services
 {
     public class SubjectService
     {
         private readonly DataContext _dataContext;
-        public SubjectService(DataContext context) { 
+        private readonly IConfiguration _configuration;
+        public SubjectService(DataContext context, IConfiguration configuration) { 
             this._dataContext = context;
+            this._configuration = configuration;
         }
 
         //Get
@@ -35,6 +38,14 @@ namespace JEOBWebAPI.Services
 
         //Post
         public Materia AddSubject(Materia materia) {
+            var ignoredCharacters = this._configuration.GetSection("IgnoredCharacters").Get<List<string>>();
+
+            foreach (string value in ignoredCharacters) {
+                materia.Nombre = materia.Nombre.Replace(value, String.Empty);
+            }
+            if (materia.Nombre.Equals(string.Empty)) {
+                return new Materia();
+            }
             var result = this._dataContext.Materias.Add(materia);
             this._dataContext.SaveChanges();
 

@@ -67,6 +67,24 @@ namespace JEOBWebAPI.Migrations
                 name: "IX_AlumnoMateria_MateriasIdMateria",
                 table: "AlumnoMateria",
                 column: "MateriasIdMateria");
+            /*var command = @"CREATE PROCEDURE GetTotalCost
+	                    @alumno AS INT
+                        AS
+                        BEGIN
+	                        SET NOCOUNT ON;
+	                        DECLARE @total AS DECIMAL;
+
+	                        SELECT @total= SUM(m.Costo) 
+		                        FROM Alumnos a
+		                        INNER JOIN AlumnoMateria am
+		                        ON am.AlumnosIdAlumno = a.IdAlumno
+		                        INNER JOIN Materias m
+		                        ON m.IdMateria = am.MateriasIdMateria
+		                        WHERE a.IdAlumno = @alumno
+	
+                        END
+                        GO";
+            migrationBuilder.Sql(command);*/
         }
 
         /// <inheritdoc />
@@ -80,6 +98,8 @@ namespace JEOBWebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Materias");
+            /*var command = "DROP PROCEDURE GetTotalCost";
+            migrationBuilder.Sql(command);*/
         }
     }
 }
